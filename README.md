@@ -37,5 +37,6 @@ The project is ongoing.
 
 localhost:3000 is frontend
 localhost:8000 is backend
+localhost:80 is nginx
     
 Also added /api/test endpoint in backend to test connection between backend and frontend
