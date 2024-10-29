@@ -36,7 +36,9 @@ The project is ongoing.
 4. After all containers up project should be ready to use 
 
 localhost:3000 is frontend
+
 localhost:8000 is backend
+
 localhost:80 is nginx
     
 Also added /api/test endpoint in backend to test connection between backend and frontend
