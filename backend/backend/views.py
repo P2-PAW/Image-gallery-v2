@@ -46,3 +46,21 @@ class LogoutView(APIView):
         request.user.auth_token.delete()
         logout(request)
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class RegisterView(APIView):
+    def post(self, request):
+        if request.user.is_authenticated:
+            return Response(
+                {"message": "Jesteś już zalogowany"}, status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            token, _ = Token.objects.get_or_create(user=user)
+            user_data = UserSerializer(user).data
+            return Response(
+                {"token": token.key, "user": user_data}, status=status.HTTP_201_CREATED
+            )
+        return Response(
+            {"message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
+        )
