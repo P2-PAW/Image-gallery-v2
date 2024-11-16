@@ -7,6 +7,8 @@ from rest_framework import status
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
+from .models import *
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class TestEndpointView(APIView):
     def get(self, request):
@@ -64,3 +66,16 @@ class RegisterView(APIView):
         return Response(
             {"message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
         )
+    
+class AddPictureView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request):
+        if not request.user.is_authenticated:
+            return Response({"message": "Dostęp tylko dla zalogowanych"}, status=status.HTTP_403_FORBIDDEN)
+        
+        serializer = ImageSerializerPost(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
