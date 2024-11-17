@@ -79,3 +79,15 @@ class AddPictureView(APIView):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class DeletePictureView(APIView):
+    def delete(self, request, picture_id):
+        if not request.user.is_authenticated:
+            return Response({"message": "Dostęp tylko dla zalogowanych"}, status=status.HTTP_403_FORBIDDEN)
+        try:
+            picture = Image.objects.get(id=picture_id, user=request.user)
+        except Image.DoesNotExist:
+            return Response({"message": "Zdjęcie nie istnieje lub nie masz do niego dostępu"}, status=status.HTTP_404_NOT_FOUND)
+        
+        picture.delete()
+        return Response({"message": "Zdjęcie zostało usunięte"}, status=status.HTTP_204_NO_CONTENT)
