@@ -26,4 +26,6 @@ urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("register/", RegisterView.as_view(), name="register"),
+    path('picture/', AddPictureView.as_view(), name='add-picture'),
+    path("picture/<int:picture_id>", DeletePictureView.as_view(), name="delete-picture")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
