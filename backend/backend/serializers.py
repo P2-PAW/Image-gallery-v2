@@ -41,3 +41,8 @@ class ImageSerializerPost(serializers.ModelSerializer):
         model = Image
         fields = '__all__'
         read_only_fields = ['date', 'user']
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = '__all__'

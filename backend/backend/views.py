@@ -91,3 +91,9 @@ class DeletePictureView(APIView):
         
         picture.delete()
         return Response({"message": "Zdjęcie zostało usunięte"}, status=status.HTTP_204_NO_CONTENT)
+    
+class PicturesAPIView(APIView):
+    def get(self, request):
+        images = Image.objects.all()
+        serializer = ImageSerializer(images, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
