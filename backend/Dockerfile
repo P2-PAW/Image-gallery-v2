@@ -14,6 +14,9 @@ RUN apk add --virtual .build-deps --no-cache postgresql-dev gcc python3-dev musl
 
 COPY . /app/backend/
 
+RUN apk add --no-cache dos2unix && \
+    dos2unix /app/backend/entrypoint.sh
+    
 # Nadaj uprawnienia do wykonywania dla entrypoint.sh
 RUN chmod +x /app/backend/entrypoint.sh
 
