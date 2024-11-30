@@ -13,9 +13,13 @@ const Modal = ({ setSelectedImg, selectedImg, onDelete }) => {
 
   const handleDelete = async () => {
      try {
-       console.error('Error fetching images:', selectedImg);
-        await axios.delete('http://localhost:8000/picture/${selectedImg.id}');
-         window.location.reload();
+        await axios.delete(`http://localhost:8000/picture/${selectedImg.id}`, {
+          headers: {
+              'Authorization': `Token ${localStorage.getItem('token')}`,
+              'Content-Type': 'multipart/form-data'
+          }
+      });
+        window.location.reload();
       } catch (error) {
         console.error('Error fetching images:', error);
       }
@@ -32,7 +36,7 @@ const Modal = ({ setSelectedImg, selectedImg, onDelete }) => {
         initial={{ y: "-100vh" }}
         animate={{ y: 0 }}
       >
-        <img src={'http://localhost:8000${selectedImg.path}'}  alt="enlarged pic" />
+        <img src={`http://localhost:8000${selectedImg.path}`}  alt="enlarged pic" />
         <button className="button" onClick={handleDelete}>
                   <FontAwesomeIcon icon={faTrash} />
               </button>

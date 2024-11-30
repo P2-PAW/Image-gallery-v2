@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faPlus } from '@fortawesome/free-solid-svg-icons';
 import axios from './api/axios';
-
+import Modal from './Modal';
 const Home = () => {
     const token = localStorage.getItem("token");
     const userJson = localStorage.getItem("user");
@@ -146,6 +146,7 @@ const Home = () => {
                     </div>
                 )}
             </div>
+            {selectedImg && <Modal selectedImg={selectedImg} setSelectedImg={setSelectedImg} />}
         </div>
     );
 };
