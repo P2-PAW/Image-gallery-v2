@@ -147,6 +147,7 @@ button {
 
 .button {
     padding: 8px 16px;
+    margin: auto;
     background-color: #FF3F80;
     color: #fff;
     text-decoration: none;
@@ -158,6 +159,7 @@ button {
 
 .main-content {
     padding: 20px;
+    margin-top: 50px;
 }
 
 .image-grid {
@@ -226,4 +228,28 @@ button {
   .modal-content img {
     max-width: 90%;
     max-height: 80vh;
+  } 
+  .add-image-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px; 
+    max-width: 90%; 
+    background-color: #303030; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    z-index: 1000;
+  }
+  
+  .add-image-form h2 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  .add-image-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
