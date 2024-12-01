@@ -17,9 +17,7 @@ class TestEndpointView(APIView):
 class LoginView(APIView):
     def post(self, request):
         if request.user.is_authenticated:
-            return Response(
-                {"message": "Jesteś już zalogowany"}, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"message": "Jesteś już zalogowany"}, status=status.HTTP_400_BAD_REQUEST)
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
             user = authenticate(
@@ -30,16 +28,10 @@ class LoginView(APIView):
                 login(request, user)
                 token, _ = Token.objects.get_or_create(user=user)
                 user_data = UserSerializer(user).data
-                return Response(
-                    {"token": token.key, "user": user_data}, status=status.HTTP_200_OK
-                )
-            return Response(
-                {"message": "Nieprawidłowy login lub hasło"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        return Response(
-            {"message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
-        )
+                return Response({"token": token.key, "user": user_data}, status=status.HTTP_200_OK)
+            return Response({"message": "Nieprawidłowy login lub hasło"}, status=status.HTTP_400_BAD_REQUEST,)
+        first_error_message = next(iter(serializer.errors.values()))[0] 
+        return Response({"message": first_error_message}, status=status.HTTP_400_BAD_REQUEST)
         
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
@@ -52,20 +44,15 @@ class LogoutView(APIView):
 class RegisterView(APIView):
     def post(self, request):
         if request.user.is_authenticated:
-            return Response(
-                {"message": "Jesteś już zalogowany"}, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"message": "Jesteś już zalogowany"}, status=status.HTTP_400_BAD_REQUEST)
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             token, _ = Token.objects.get_or_create(user=user)
             user_data = UserSerializer(user).data
-            return Response(
-                {"token": token.key, "user": user_data}, status=status.HTTP_201_CREATED
-            )
-        return Response(
-            {"message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
-        )
+            return Response({"token": token.key, "user": user_data}, status=status.HTTP_201_CREATED )
+        first_error_message = next(iter(serializer.errors.values()))[0]
+        return Response({"message": first_error_message}, status=status.HTTP_400_BAD_REQUEST)
     
 class AddPictureView(APIView):
     parser_classes = [MultiPartParser, FormParser]
@@ -78,7 +65,8 @@ class AddPictureView(APIView):
         if serializer.is_valid():
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        first_error_message = next(iter(serializer.errors.values()))[0]
+        return Response(first_error_message, status=status.HTTP_400_BAD_REQUEST)
     
 class DeletePictureView(APIView):
     def delete(self, request, picture_id):
