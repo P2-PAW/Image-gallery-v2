@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faPlus } from '@fortawesome/free-solid-svg-icons';
 import axios from './api/axios';
-
+import Modal from './Modal';
 const Home = () => {
     const token = localStorage.getItem("token");
     const userJson = localStorage.getItem("user");
@@ -22,8 +22,8 @@ const Home = () => {
 
     const getImages = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/picture`);
-            setImages(response.data.images);
+            const response = await axios.get(`http://localhost:8000/pictures/`);
+            setImages(response.data);
         } catch (error) {
             console.error('Error fetching images:', error);
         }
@@ -44,7 +44,7 @@ const Home = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:8000/picture/${id}`, formData, {
+            const response = await axios.post(`http://localhost:8000/picture/`, formData, {
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('token')}`,
                     'Content-Type': 'multipart/form-data'
@@ -146,6 +146,7 @@ const Home = () => {
                     </div>
                 )}
             </div>
+            {selectedImg && <Modal selectedImg={selectedImg} setSelectedImg={setSelectedImg} />}
         </div>
     );
 };
