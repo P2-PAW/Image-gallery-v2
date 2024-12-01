@@ -66,7 +66,7 @@ class AddPictureView(APIView):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         first_error_message = next(iter(serializer.errors.values()))[0]
-        return Response(first_error_message, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": first_error_message}, status=status.HTTP_400_BAD_REQUEST)
     
 class DeletePictureView(APIView):
     def delete(self, request, picture_id):
